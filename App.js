@@ -1,42 +1,47 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Modal, TextInput, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, Modal, TextInput, ScrollView, FlatList } from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
+
+import ItemList from './src/components/ItemList';
 
 export default function App() {
 
   const [open, setOpen] = useState(false)
-  const [item, setItem] = useState('');
+  const [item, setItem] = useState([
+    {key: 1, item: "Arroz"},
+    {key: 2, item: "Feijão"},
+    {key: 3, item: "Açúcar"},
+    {key: 4, item: "Farinha"},
+  ]);
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar backgroundColor="#121d31" barStyle="light-content" />
       <View style={styles.titleArea}>
         <Text style={styles.title}>Lista de compras</Text>
       </View>
 
-      <View scrollEnabled style={styles.listArea}>
-        {/* <FlatList /> */}
-        {/* <ScrollView>
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-        </ScrollView> */}
-          <li>item 1</li>
-          <li>item 2</li>
-          <li>item 3</li>
-          <li>item 4</li>
-          <li>item 5</li>
-      </View>
-
+      <ScrollView style={styles.listArea}>
+        <FlatList
+          marginHorizontal={10}
+          showsHorizontalScrollIndicator={false}
+          data={item}
+          keyExtractor={ (item) => String(item.key)}
+          renderItem={ ({item}) => <ItemList data={item}/> }
+        />
+      </ScrollView>
 
       <Modal animationType='slide' transparent={true} visible={open}>
         <View style={styles.modal}>
           <View style={styles.modalView}>
             <View style={styles.closeModal}>
-              <Ionicons name="ios-close" size={35} color={"#264653"} onPress={() => setOpen(false)} />
+              <Ionicons name="ios-close" size={40} color={"#264653"} onPress={() => setOpen(false)} />
             </View>
             <View style={styles.addItem}>
               <TextInput
                 style={styles.input}
-                value={item}
-                onChangeText={ (item) => {setItem(item)}}
+                value={item.key}
+                // onChangeText={ (item) => {setItem(item)}}
                 placeholder='Informe o item'
                 placeholderTextColor={'#264653'}
               />
@@ -76,9 +81,6 @@ const styles = StyleSheet.create({
   },
   listArea: {
     flex: 1,
-    borderWidth: 1,
-    // borderColor: '#264653',
-    borderColor: '#000',
     borderRadius: 15,
     width: "100%",
     zIndex: 9,
@@ -114,16 +116,18 @@ const styles = StyleSheet.create({
   },
   modal: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0,0.2)',
   },
   modalView: {
     backgroundColor: "#e9c46a",
-    borderRadius: 30,
+    borderWidth: 5,
+    borderColor: "#ddc",
+    borderRadius: 10,
     paddingVertical: 20,
     paddingHorizontal: 20,
-    width: 300
+    marginBottom: 7,
+    width: 350
   },
   closeModal: {
     alignItems: 'flex-end',
@@ -133,6 +137,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#264653",
     borderRadius: 30,
+    padding: 7,
     fontSize: 15,
     fontWeight: "600",
     textAlign: "center",
@@ -141,8 +146,8 @@ const styles = StyleSheet.create({
   btnAdd: {
     backgroundColor: "#264653",
     borderRadius: 30,
-    padding: 2,
-    marginVertical: 5,
+    padding: 7,
+    marginVertical: 10,
     width: 100,
   },
   btnText: {
