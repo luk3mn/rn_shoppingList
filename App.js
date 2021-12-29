@@ -1,18 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, Modal, TextInput, ScrollView, FlatList } from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
 
 import ItemList from './src/components/ItemList';
 
+// import SQLite from 'expo-sqlite'
+
+// const db = SQLite.openDatabase('dbcooperative.db')
+
 export default function App() {
 
   const [open, setOpen] = useState(false)
-  const [item, setItem] = useState([
-    {key: 1, item: "Arroz"},
-    {key: 2, item: "Feijão"},
-    {key: 3, item: "Açúcar"},
-    {key: 4, item: "Farinha"},
-  ]);
+  const [item, setItem] = useState([]);
+  const [input, setInput] = useState('');
+
+  const addItems = function() {
+    // testa se existe valor no campo
+    if (!input) return;
+
+    const data = {
+      key: input,
+      item: input
+    };
+
+    setItem([...item, data]); // add o item ao final do array
+    setOpen(false); // Fecha o modal
+    setInput(''); // limpa o campo 
+  }
+
+  // Marca o item comprado
+  const checkItem = useCallback((data) => {
+    alert("mudar de cor")
+  })
+
+  // Remove um item da lista
+  const removeItem = useCallback((data) => {
+    const find = item.filter(r => r.key !== data.key)
+    setItem(find);
+  })
 
   return (
     <SafeAreaView style={styles.container}>
@@ -27,7 +52,7 @@ export default function App() {
           showsHorizontalScrollIndicator={false}
           data={item}
           keyExtractor={ (item) => String(item.key)}
-          renderItem={ ({item}) => <ItemList data={item}/> }
+          renderItem={ ({item}) => <ItemList data={item} checkItem={checkItem} removeItem={removeItem}/> }
         />
       </ScrollView>
 
@@ -41,11 +66,11 @@ export default function App() {
               <TextInput
                 style={styles.input}
                 value={item.key}
-                // onChangeText={ (item) => {setItem(item)}}
+                onChangeText={ (item) => {setInput(item)}}
                 placeholder='Informe o item'
                 placeholderTextColor={'#264653'}
               />
-              <TouchableOpacity style={styles.btnAdd} >
+              <TouchableOpacity style={styles.btnAdd} onPress={addItems} >
                 <Text style={styles.btnText}>Adicionar</Text>
               </TouchableOpacity>
             </View>
