@@ -1,21 +1,41 @@
-import React, { useState, useCallback } from 'react';
+// https://reactnative.dev/docs/asyncstorag
+
+import React, { useState, useCallback, useEffect } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, Modal, TextInput, ScrollView, FlatList } from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 import ItemList from './src/components/ItemList';
 
-// import SQLite from 'expo-sqlite'
-
-// const db = SQLite.openDatabase('dbcooperative.db')
-
 export default function App() {
 
-  const [open, setOpen] = useState(false)
   const [item, setItem] = useState([]);
+  const [open, setOpen] = useState(false)
   const [input, setInput] = useState('');
 
+  // Armazenamento de dados
+  const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem('@item', JSON.stringify(value));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // Leitura de dados
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@item');
+      if (value) {
+        setItem(JSON.parse(value));
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const addItems = function() {
-    // testa se existe valor no campo
+    // validação do input
     if (!input) return;
 
     const data = {
@@ -38,6 +58,14 @@ export default function App() {
     const find = item.filter(r => r.key !== data.key)
     setItem(find);
   })
+
+  useEffect(() => {
+    getData();
+  }, [])
+
+  useEffect(() => {
+    storeData(item);
+  }, [item]);
 
   return (
     <SafeAreaView style={styles.container}>
