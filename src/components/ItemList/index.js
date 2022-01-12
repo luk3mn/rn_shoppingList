@@ -8,9 +8,9 @@ export default function ItemList({ data, checkItem, removeItem }) {
       <TouchableOpacity onPress={() => checkItem(data)}>
         <Ionicons name='md-checkmark-circle' size={30} color={"#2a9d8f"} />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => removeItem(data)}>
+      {/* <TouchableOpacity onPress={() => removeItem(data)}>
         <Ionicons name='md-remove-circle' size={30} color={"#e76f51"} />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <View>
         <Text style={styles.textItem}> {data.item} </Text>
       </View>
@@ -31,7 +31,8 @@ const styles = StyleSheet.create({
   },
   textItem: {
     color: "#264653",
-    fontSize: 18,
+    fontSize: 19,
     fontWeight: "700",
+    textTransform: 'uppercase'
   }
 })

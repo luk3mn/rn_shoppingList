@@ -50,13 +50,15 @@ export default function App() {
 
   // Marca o item comprado
   const checkItem = useCallback((data) => {
-    alert("mudar de cor")
+    // alert("mudar de cor")
+    const find = item.filter(r => r.key !== data.key)
+    setItem(find);
   })
 
   // Remove um item da lista
   const removeItem = useCallback((data) => {
     const find = item.filter(r => r.key !== data.key)
-    setItem(find);
+    // setItem(find);
   })
 
   useEffect(() => {
